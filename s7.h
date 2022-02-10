@@ -12,10 +12,7 @@
        #define S7_SEG_P 7  (Сегмент P -- висит на бите 7) -- это точка
        Расположение сегментов см. ниже
 
-   2. "Полярность" поджига.
-         Определите S7_SEG_INVERT, чтобы инвертировать выходные значения (в зависимости от общего катода/анода индикатора)
-
-   3. Z7_SET можно сформировать массив знакогенератора. По умолчанию в нем только цифры
+   2. Z7_SET можно сформировать массив знакогенератора. По умолчанию в нем только цифры
         Например: S7_NUMS, S7_SPACE, S7_CHAR(1,1,0,0,1,1,1,0)
 
 --------------------------------------------------------------------------------
@@ -69,13 +66,8 @@
 #endif
 
 //Макрос "сборки" байта знакогенератора из определений "бит-сегмент" и "полярность поджига" (1/0-зажечь/потушить).
-#ifdef S7_SEG_INVERT
-  #define S7_CHAR(xA,xB,xC,xD,xE,xF,xG,xP) ((unsigned char)~((xA<<S7_SEG_A)|(xB<<S7_SEG_B)|(xC<<S7_SEG_C)|(xD<<S7_SEG_D)|(xE<<S7_SEG_E)|(xF<<S7_SEG_F)|(xG<<S7_SEG_G)|(xP<<S7_SEG_P)))
-  #define S7_ADD_POINT(buf) (buf) &= ~S7_POINT
-#else
   #define S7_CHAR(xA,xB,xC,xD,xE,xF,xG,xP) ((unsigned char)((xA<<S7_SEG_A)|(xB<<S7_SEG_B)|(xC<<S7_SEG_C)|(xD<<S7_SEG_D)|(xE<<S7_SEG_E)|(xF<<S7_SEG_F)|(xG<<S7_SEG_G)|(xP<<S7_SEG_P)))
-  #define S7_ADD_POINT(buf) (buf) |= S7_POINT
-#endif
+  #define S7_ADD_POINT(buf) ((buf) |= S7_POINT)
 
 //Небольшие макросы для пробела/забоя/точки/цифр
 #define S7_SPACE  S7_CHAR(0,0,0,0,0,0,0,0)
@@ -133,8 +125,6 @@
   #error Unknown compiler
 #endif
 
-extern void s7AddPoint(char* v);
-
 /*
   Принимает строку, заполняет видеопамять якобы в буфере число с расчетом dig знаков в индикаторе, dec знаков после запятой
   Пустое место забивается  S7_SPACE, проставляются недостающие нули S7_0 и ставится точка.
@@ -143,6 +133,8 @@ extern void s7AddPoint(char* v);
   @todo по хорошему тут бы выпасть в большую ошибку и сохранить её код.
 */
 extern void s7Str2fixPoint(char* buf, char* v, uint8_t digits, uint8_t decimal);
+
+extern char s7AddPoint(char* v);
 
 #endif
 

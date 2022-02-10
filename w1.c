@@ -12,23 +12,20 @@
 
 uint8_t w1Reset(void)
 {
-  uint8_t err;
+  u8 err;
   iopOutputLow(W1_PORT, bv(W1_BIT));
   _delay_us(480);      
   
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE){    
-    // set Pin as input - wait for clients to pull low
-    OW_DIR_IN(); // input
-    //    OW_OUT_HIGH(); // pullup    
+    iopInput(W1_PORT, bv(W1_BIT));
     _delay_us(66);
-    err = OW_GET_IN();
+    err = iopBit(W1_PORT, W1_BIT) ? 1 : 0;
   }
   
-  // after a delay the clients should release the line
-  // and input-pin gets back to high due to pull-up-resistor
+  // проверка на замыкание линии
   _delay_us(480 - 66);
-  if( OW_GET_IN() == 0 ){		// short circuit
-    err = 1;
+  if(iopBit(W1_PORT, W1_BIT) == 0){
+    err = 2;
   }
   return err;
 }
@@ -48,13 +45,12 @@ extern uint8_t w1rw( uint8_t data )
       
       data >>= 1; // продвигаем "очередь" данных
   	  _delay_us(5);
-      if( OW_GET_IN() ){ // читаем бит
+      if(iopBit(W1_PORT, W1_BIT)){ // читаем бит
     	  data |= 0x80;
   	  }
 	  }
 	  _delay_us(60 - 12); // хвост слота
-    //  OW_OUT_HIGH();
-	  OW_DIR_IN();  // w1 high
+	  iopInput(W1_PORT, bv(W1_BIT));  // w1 high
   }    
 	return data;
 }

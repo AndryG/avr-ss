@@ -11,12 +11,8 @@
 */
 const unsigned char  S7[] PROGMEM = {S7_SET};  // 0-9, пробел и символ P
 
-void s7AddPoint(char* v){
-  #ifdef S7_SEG_INVERT
-    *v &= S7_POINT;
-  #else
-    *v |= S7_POINT;
-  #endif
+char s7AddPoint(char* v){
+  return *v |= S7_POINT;
 }
 
 void s7Str2fixPoint(char* str, char* out, uint8_t digits, uint8_t decimal){

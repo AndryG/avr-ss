@@ -1,8 +1,9 @@
 /*
  * Created: 09.01.2022 15:43:48
  *  a.hordieiev@ukr.net
+ * https://aterlux.ru/article/1wire
+ * https://avr.ru/beginer/understand/1wire
  */
-/* https://aterlux.ru/article/1wire */
 
 #include <avr/io.h>
 #include <util/atomic.h>
