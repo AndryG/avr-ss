@@ -1,7 +1,7 @@
 #include "buttons.h"
 
-static   uint8_t tbtnCurr    = 0xFF; //Текущие состояния
-static   uint8_t tbtnStable  = 0xFF; //Стабильные состояния
+static   uint8_t tbtnCurr    = 0x0; //Текущие состояния
+static   uint8_t tbtnStable  = 0x0; //Стабильные состояния
 
 #if TBTN_REPEATE_MASK > 0
 uint8_t tbtnCounter = 0;    //таймер автоповтора //fixme автоповтор тут и не нужен - переменная только в одном методе изменяется
@@ -11,7 +11,7 @@ uint8_t tbtnCounter = 0;    //таймер автоповтора //fixme автоповтор тут и не нуж
   #ifdef __BUILTIN_AVR_SWAP
     #define swap(x) __builtin_avr_swap(x)
   #else  
-    #define swap(A) (A<<4)|(A>>4)
+    #define swap(A) ((A<<4)|(A>>4))
   #endif  
 #endif
 
@@ -30,7 +30,7 @@ uint8_t tbtnProcess(uint8_t st){
   tbtnStable |= (tbtnCurr | (temp & 0x0f));  // past pres добавляем в stable биты отпущенных кнопок
   tbtnCurr = temp & 0xf0;  // pres 0000  настоящее становится прошлым
   
-  //Определение состояний кнопок (имеем стаб. сост. в kbd_ss)
+  //Определение состояний кнопок (имеем стаб. сост. в tbtnStable)
   temp = swap(tbtnStable);   // pres past  1 отпущена, 0 нажата
   uint8_t res = ~temp & 0xf0;// "сейчас нажато" - верхняя часть результата
   temp = temp ^ tbtnStable;  // past ^ pres - изменившиеся состояния
@@ -44,9 +44,11 @@ uint8_t tbtnProcess(uint8_t st){
   }  
 
   #if TBTN_REPEATE_MASK > 0
-  if(!tbtnCounter--){     //таймер автоповтора
-    res |= ~tbtnStable & (TBTN_REPEATE_MASK); // имитируем нажатие удерживаемых кнопок с автоповтором
-    tbtnCounter = TBTN_DELAY_B; //перезапуск таймера на кор. задержку
+  if(tbtnCounter){ // без этой проверки зажатая кнопка при старте генерирetn click
+    if(0 == --tbtnCounter){     //таймер автоповтора
+      res |= ~tbtnStable & (TBTN_REPEATE_MASK); // имитируем нажатие удерживаемых кнопок с автоповтором
+      tbtnCounter = TBTN_DELAY_B; //перезапуск таймера на кор. задержку
+    }
   }
   #endif
   return res;
