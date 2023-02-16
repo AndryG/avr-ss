@@ -1,0 +1,4 @@
+*.componentinfo.xml
+*.pdsbak
+Debug
+Release
