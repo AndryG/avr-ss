@@ -1,8 +1,5 @@
 #include "w1.h"
 
-#define W1_PORT PORTD
-#define W1_BIT  PD3
-
 #define OW_GET_IN()   (iopBit(W1_PORT, W1_BIT))
 //#define OW_OUT_LOW()  ( W1_PORT &= (~(1 << W1_BIT)) )
 #define OW_OUT_LOW()  (iopLow(W1_PORT, bv(W1_BIT)))

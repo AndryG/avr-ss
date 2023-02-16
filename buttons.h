@@ -18,6 +18,6 @@
   #define TBTN_DELAY_B      2
 #endif
 
-uint8_t tbtnProcess(uint8_t);
+extern uint8_t tbtnProcess(uint8_t);
   
 

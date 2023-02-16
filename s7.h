@@ -16,28 +16,23 @@
         Например: S7_NUMS, S7_SPACE, S7_CHAR(1,1,0,0,1,1,1,0)
 
 --------------------------------------------------------------------------------
-  ПОСЛЕ #include ZG7.h мы получим в использование:
-
-   1. Массив знакогенератора unsigned char ZG7[]
-       ZG7[0x00]..ZG7[0x09] -- коды циферок
-       ZG7[0x0A]..ZG7[0x1F] -- коды доп. символов
-
-   2. Несколько доп. кодов:
-       S7_space -- макрос "пробела"
-       S7_all   -- макрос "забоя" (без точки)
-       S7_point -- макрос для поджига точки
+  ПОСЛЕ #include ZG7.h мы получим в использование определения символов S7_*
+     Из них нужно сформировать и объявить массив знакогненератора S7, который в этом файле оишь объявлен.
+  Например (main.c avr-gcc):
+    const unsigned char PROGMEM S7[] = {S7_SET, S7_MINUS}; // 0-9 и минус
 
 --------------------------------------------------------------------------------
   Расположение сегментов в индикаторе
 
-  *-A-*
+  ??A??
   F   B
-  |-G-|
+  ??G??
   E   C
-  *-D-*P
+  ??D??P
 
---------------------------------------------------------------------------------
 */
+
+#include <avr/pgmspace.h>
 
 //Значеие по умолчанию для связки бит-сегмент
 #ifndef S7_SEG_A
@@ -70,38 +65,38 @@
   #define S7_ADD_POINT(buf) ((buf) |= S7_POINT)
 
 //Небольшие макросы для пробела/забоя/точки/цифр
-#define S7_SPACE  S7_CHAR(0,0,0,0,0,0,0,0)
-#define S7_ALL    S7_CHAR(1,1,1,1,1,1,1,0)
-#define S7_POINT  S7_CHAR(0,0,0,0,0,0,0,1)
-#define S7_MINUS  S7_CHAR(0,0,0,0,0,0,1,0)
-#define S7_0 			S7_CHAR(1,1,1,1,1,1,0,0)
-#define S7_1 			S7_CHAR(0,1,1,0,0,0,0,0)
-#define S7_2 			S7_CHAR(1,1,0,1,1,0,1,0)
-#define S7_3 			S7_CHAR(1,1,1,1,0,0,1,0)
-#define S7_4 			S7_CHAR(0,1,1,0,0,1,1,0)
-#define S7_5 			S7_CHAR(1,0,1,1,0,1,1,0)
-#define S7_6 			S7_CHAR(1,0,1,1,1,1,1,0)
-#define S7_7 			S7_CHAR(1,1,1,0,0,0,0,0)
-#define S7_8 			S7_CHAR(1,1,1,1,1,1,1,0)
-#define S7_9 			S7_CHAR(1,1,1,1,0,1,1,0)
-#define S7_A      S7_CHAR(1,1,1,0,1,1,1,0)
-#define S7_b      S7_CHAR(0,0,1,1,1,1,1,0)
-#define S7_c      S7_CHAR(0,0,0,1,1,0,1,0)
-#define S7_C      S7_CHAR(1,0,0,1,1,1,0,0)
-#define S7_d      S7_CHAR(0,1,1,1,1,0,1,0)
-#define S7_E      S7_CHAR(1,0,0,1,1,1,1,0)
-#define S7_F      S7_CHAR(1,0,0,0,1,1,1,0)
-#define S7_G      S7_CHAR(1,0,1,1,1,1,0,0)
-#define S7_h      S7_CHAR(0,0,1,0,1,1,1,0)
-#define S7_j      S7_CHAR(0,1,1,1,0,0,0,0)
-#define S7_L      S7_CHAR(0,0,0,1,1,1,0,0)
-#define S7_n      S7_CHAR(0,0,1,0,1,0,1,0)
-#define S7_o      S7_CHAR(0,0,1,1,1,0,1,0)
-#define S7_P      S7_CHAR(1,1,0,0,1,1,1,0)
-#define S7_r      S7_CHAR(0,0,0,0,1,0,1,0)
-#define S7_S      S7_CHAR(1,0,1,1,0,1,1,0)
-#define S7_t      S7_CHAR(0,0,0,1,1,1,1,0)
-#define S7_u      S7_CHAR(0,0,1,1,1,0,0,0)
+#define S7_SPACE    S7_CHAR(0,0,0,0,0,0,0,0)
+#define S7_ALL      S7_CHAR(1,1,1,1,1,1,1,0)
+#define S7_POINT    S7_CHAR(0,0,0,0,0,0,0,1)
+#define S7_MINUS    S7_CHAR(0,0,0,0,0,0,1,0)
+#define S7_0        S7_CHAR(1,1,1,1,1,1,0,0)
+#define S7_1        S7_CHAR(0,1,1,0,0,0,0,0)
+#define S7_2        S7_CHAR(1,1,0,1,1,0,1,0)
+#define S7_3        S7_CHAR(1,1,1,1,0,0,1,0)
+#define S7_4        S7_CHAR(0,1,1,0,0,1,1,0)
+#define S7_5        S7_CHAR(1,0,1,1,0,1,1,0)
+#define S7_6        S7_CHAR(1,0,1,1,1,1,1,0)
+#define S7_7        S7_CHAR(1,1,1,0,0,0,0,0)
+#define S7_8        S7_CHAR(1,1,1,1,1,1,1,0)
+#define S7_9        S7_CHAR(1,1,1,1,0,1,1,0)
+#define S7_A        S7_CHAR(1,1,1,0,1,1,1,0)
+#define S7_b        S7_CHAR(0,0,1,1,1,1,1,0)
+#define S7_c        S7_CHAR(0,0,0,1,1,0,1,0)
+#define S7_C        S7_CHAR(1,0,0,1,1,1,0,0)
+#define S7_d        S7_CHAR(0,1,1,1,1,0,1,0)
+#define S7_E        S7_CHAR(1,0,0,1,1,1,1,0)
+#define S7_F        S7_CHAR(1,0,0,0,1,1,1,0)
+#define S7_G        S7_CHAR(1,0,1,1,1,1,0,0)
+#define S7_h        S7_CHAR(0,0,1,0,1,1,1,0)
+#define S7_j        S7_CHAR(0,1,1,1,0,0,0,0)
+#define S7_L        S7_CHAR(0,0,0,1,1,1,0,0)
+#define S7_n        S7_CHAR(0,0,1,0,1,0,1,0)
+#define S7_o        S7_CHAR(0,0,1,1,1,0,1,0)
+#define S7_P        S7_CHAR(1,1,0,0,1,1,1,0)
+#define S7_r        S7_CHAR(0,0,0,0,1,0,1,0)
+#define S7_S        S7_CHAR(1,0,1,1,0,1,1,0)
+#define S7_t        S7_CHAR(0,0,0,1,1,1,1,0)
+#define S7_u        S7_CHAR(0,0,1,1,1,0,0,0)
 //#define S7_      S7_CHAR(0,0,0,0,0,0,0,0)
 
 /*
@@ -114,12 +109,11 @@
 #endif
 
 // Объявление массива знакогенератора
-#ifdef __GNUC__                   // GNU Compiler
+#ifdef __GNUC__                     // GNU Compiler
   extern const unsigned char PROGMEM S7[];
-#elif defined(__CODEVISIONAVR__)   // CodeVision
+#elif defined(__CODEVISIONAVR__)    // CodeVision
   extern flash unsigned char S7[];
-#elif defined(__ICCAVR__)
-          // IAR C Compiler
+#elif defined(__ICCAVR__)           // IAR C Compiler
   extern __flash unsigned char S7[];
 #else
   #error Unknown compiler

@@ -1,10 +1,10 @@
 #include "buttons.h"
 
-static   uint8_t tbtnCurr    = 0x0; //Текущие состояния
-static   uint8_t tbtnStable  = 0x0; //Стабильные состояния
+static  uint8_t tbtnCurr    = 0x0; //Текущие состояния
+static uint8_t tbtnStable  = 0x0; //Стабильные состояния
 
 #if TBTN_REPEATE_MASK > 0
-uint8_t tbtnCounter = 0;    //таймер автоповтора //fixme автоповтор тут и не нужен - переменная только в одном методе изменяется
+static uint8_t tbtnCounter = 0;    //таймер автоповтора //fixme автоповтор тут и не нужен - переменная только в одном методе изменяется
 #endif
 
 #ifndef swap
@@ -44,12 +44,12 @@ uint8_t tbtnProcess(uint8_t st){
   }  
 
   #if TBTN_REPEATE_MASK > 0
-  if(tbtnCounter){ // без этой проверки зажатая кнопка при старте генерирetn click
-    if(0 == --tbtnCounter){     //таймер автоповтора
-      res |= ~tbtnStable & (TBTN_REPEATE_MASK); // имитируем нажатие удерживаемых кнопок с автоповтором
-      tbtnCounter = TBTN_DELAY_B; //перезапуск таймера на кор. задержку
-    }
-  }
-  #endif
+      if(tbtnCounter){ // без этой проверки зажатая кнопка при старте генерирetn click
+        if(0 == --tbtnCounter){     //таймер автоповтора
+          res |= ~tbtnStable & (TBTN_REPEATE_MASK); // имитируем нажатие удерживаемых кнопок с автоповтором
+          tbtnCounter = TBTN_DELAY_B; //перезапуск таймера на кор. задержку
+        }
+      }
+      #endif
   return res;
 }

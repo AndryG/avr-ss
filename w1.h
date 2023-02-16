@@ -9,10 +9,12 @@
 #include <util/atomic.h>
 #include <util/delay.h>
 
-
-#define W1_PORT PORTD
-
-#define W1_BIT  PD3
+#ifndef W1_PORT
+    #error "W1_PORT not defined. Set port for one-wire"
+#endif
+#ifndef W1_BIT
+    #error "W1_BIT not defined. Set bit for one-wire"
+#endif
 
 uint8_t w1Reset(void);
 
