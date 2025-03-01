@@ -1,21 +1,21 @@
-/* I2C synchronous master read/write using polling (no interrupts)
+п»ї/* I2C synchronous master read/write using polling (no interrupts)
 
-    flags |= fRTC_NO_ACK; // под одним флагом собираем все ошибки часов
-    if(i2cStart(RTC_ADDR)){ //todo ? что именно стоит тут проверять из протокола i2c
+    flags |= fRTC_NO_ACK; // РїРѕРґ РѕРґРЅРёРј С„Р»Р°РіРѕРј СЃРѕР±РёСЂР°РµРј РІСЃРµ РѕС€РёР±РєРё С‡Р°СЃРѕРІ
+    if(i2cStart(RTC_ADDR)){ //todo ? С‡С‚Рѕ РёРјРµРЅРЅРѕ СЃС‚РѕРёС‚ С‚СѓС‚ РїСЂРѕРІРµСЂСЏС‚СЊ РёР· РїСЂРѕС‚РѕРєРѕР»Р° i2c
         i2cWrite(0);
         i2cStart(RTC_ADDR + 1);
         u8 cnt = sizeof(rtc_t);
         u8* p = (u8*)&rtc;
-        flags |= fRTC_NO_SET; // ломаем значение часов, поставим метку
+        flags |= fRTC_NO_SET; // Р»РѕРјР°РµРј Р·РЅР°С‡РµРЅРёРµ С‡Р°СЃРѕРІ, РїРѕСЃС‚Р°РІРёРј РјРµС‚РєСѓ
         do{
             *(p++) = bcd2dec(i2cRead(--cnt > 0));
         } while (cnt);
         i2cStop();
-        // todo # проверку значения часов придумать и добавить
-        flags &= ~ (fRTC_NO_ACK | fRTC_NO_SET);  // только здесь можно очищать флаги
+        // todo # РїСЂРѕРІРµСЂРєСѓ Р·РЅР°С‡РµРЅРёСЏ С‡Р°СЃРѕРІ РїСЂРёРґСѓРјР°С‚СЊ Рё РґРѕР±Р°РІРёС‚СЊ
+        flags &= ~ (fRTC_NO_ACK | fRTC_NO_SET);  // С‚РѕР»СЊРєРѕ Р·РґРµСЃСЊ РјРѕР¶РЅРѕ РѕС‡РёС‰Р°С‚СЊ С„Р»Р°РіРё
     }
 
-   Натхнення i код для переробки взятi у
+   РќР°С‚С…РЅРµРЅРЅСЏ i РєРѕРґ РґР»СЏ РїРµСЂРµСЂРѕР±РєРё РІР·СЏС‚i Сѓ
 
    David Johnson-Davies - www.technoblogy.com - 5th June 2022
    CC BY 4.0

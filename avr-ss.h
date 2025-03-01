@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -33,7 +33,7 @@ typedef volatile uint8_t port_t;
 
 #define iopOutputLow(port, mask) do{port &= ~(mask); IOP_DDR(port) |= (mask);}while(0)
 
-#define iopOutputSet(port, data) do{port = (data); IOP_DDR(port) = (data);}while(0)//fixme фигня непонятная, что он делает и зачем тут IOP_DDR
+#define iopOutputSet(port, data) do{port = (data); IOP_DDR(port) = (data);}while(0)//fixme С„РёРіРЅСЏ РЅРµРїРѕРЅСЏС‚РЅР°СЏ, С‡С‚Рѕ РѕРЅ РґРµР»Р°РµС‚ Рё Р·Р°С‡РµРј С‚СѓС‚ IOP_DDR
 
 #define iopOutput(port, mask) (IOP_DDR(port) |= (mask))
 

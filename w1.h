@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Created: 09.01.2022 15:43:48
  *  a.hordieiev@ukr.net
  * https://aterlux.ru/article/1wire

@@ -1,4 +1,4 @@
-#include "func.h"
+ï»¿#include "func.h"
 static int16_t pow10Table16i [] = {10000, 1000, 100, 10, 1};
 
 char *itoa16(int16_t value, char buffer[]){
@@ -9,10 +9,10 @@ char *itoa16(int16_t value, char buffer[]){
   }
   if(value > 0){
     int16_t *p10 = pow10Table16i;
-    while(value < *p10){ // ïðîïóñêàåì áîëüøèå âàðèàíòû âû÷èòàåìîãî
+    while(value < *p10){ // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°ÐµÐ¼ Ð±Ð¾Ð»ÑŒÑˆÐ¸Ðµ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ñ‹ Ð²Ñ‹Ñ‡Ð¸Ñ‚Ð°ÐµÐ¼Ð¾Ð³Ð¾
       p10 += 1;
     }
-    while(p10 != &pow10Table16i[4]){// îáðàáîòêà âñåõ âû÷èòàåìûõ êðîìå åäèíèöû
+    while(p10 != &pow10Table16i[4]){// Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð²ÑÐµÑ… Ð²Ñ‹Ñ‡Ð¸Ñ‚Ð°ÐµÐ¼Ñ‹Ñ… ÐºÑ€Ð¾Ð¼Ðµ ÐµÐ´Ð¸Ð½Ð¸Ñ†Ñ‹
       uint8_t count = '0';
       int16_t v10 = *p10;
       *ptr = '0';
@@ -24,7 +24,7 @@ char *itoa16(int16_t value, char buffer[]){
       p10 += 1;
     }
   }
-  *ptr++ = '0' + value; // äîáàâëÿåì ñàìûé ìëàäøèé ðàçðÿä
+  *ptr++ = '0' + value; // Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ ÑÐ°Ð¼Ñ‹Ð¹ Ð¼Ð»Ð°Ð´ÑˆÐ¸Ð¹ Ñ€Ð°Ð·Ñ€ÑÐ´
   *ptr = 0;
   return buffer;
 }
